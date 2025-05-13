@@ -1,4 +1,4 @@
-# Git 分支命名规范
+# 分支规范
 为了规范团队的分支管理，提高协作效率，推荐使用以下 Git 分支命名规则。
 
 ---
@@ -37,3 +37,210 @@
 
 通过遵循以上命名规范，可以使团队协作更加高效，分支管理更加清晰明了。
 
+## 拉取规范
+一般情况下统一从 origin prod 最新提交记录拉取分支
+
+
+# 分支提交规范
+
+ feature 分支为开发分支，原则上在合并入主流分支：dev,stg,rel,prod 前，最多只能有 5 次commit，其他类型的分支（bugfix、hotfix等）理论上应该更少提交记录。
+
+
+
+
+
+
+
+
+
+![image](https://github.com/user-attachments/assets/04b1f923-1616-402e-b59d-1ac89bf3966b)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+merge 顺序错了！！ 0509 后续再多提交装作 bugFix 然后再合到 stg 后面再把 fea 合到 rel rel 再多个 ver 提交 prod merge 后续看下如何统一所有环境提交记录 
+
+
+
+
+
+
+
+
+
+
+
+# `git reset` 与 `git rebase -i HEAD~` 的使用步骤与场景
+
+## 一、`git reset` 的使用步骤与场景
+
+### **1. 使用步骤**
+1. **查看提交历史**：
+   使用 `git log --oneline` 检查提交历史，找到需要回退的目标提交：
+   ```bash
+   git log --oneline
+   ```
+   示例输出：
+   ```text
+   abc123 First commit
+   def456 Second commit
+   ghi789 Third commit
+   jkl012 Fourth commit
+   mno345 Fifth commit
+   ```
+
+2. **选择一种 `reset` 模式**：
+   - `--soft`：保留提交记录，文件更改会放入暂存区。
+   - `--mixed`（默认）：保留文件更改，但清空暂存区。
+   - `--hard`：直接回退到目标提交，所有后续更改都被丢弃。
+
+   **示例命令**：
+   ```bash
+   git reset --soft abc123
+   ```
+
+3. **重新提交更改（可选）**：
+   如果使用 `--soft` 或 `--mixed` 模式，修改完成后重新提交：
+   ```bash
+   git commit -m "New commit message"
+   ```
+
+4. **推送到远端（如果需要）**：
+   如果已经将分支推送到远端，可能需要强制推送：
+   ```bash
+   git push origin <branch-name> --force
+   ```
+
+---
+
+### **2. 使用场景**
+1. **合并多个提交**：
+   将多个提交合并为一个新的提交，清理提交历史。
+   - 示例：将最近的 3 次提交合并为 1 次：
+     ```bash
+     git reset --soft HEAD~3
+     git commit -m "Combine changes into one commit"
+     ```
+
+2. **撤销最近的提交**：
+   如果误提交了代码，可以回退到上一个提交。
+   - 示例：
+     ```bash
+     git reset --mixed HEAD~1
+     ```
+
+3. **重置分支到特定提交**：
+   将分支状态恢复到指定提交，清理不需要的更改。
+   - 示例：
+     ```bash
+     git reset --hard abc123
+     ```
+
+---
+
+## 二、`git rebase -i HEAD~` 的使用步骤与场景
+
+### **1. 使用步骤**
+1. **运行交互式 rebase**：
+   使用 `git rebase -i HEAD~<number>` 命令打开交互式编辑器。例如：
+   ```bash
+   git rebase -i HEAD~5
+   ```
+
+2. **修改提交操作**：
+   在交互式编辑器中，按顺序列出最近的提交记录，类似以下内容：
+   ```text
+   pick abc123 First commit
+   pick def456 Second commit
+   pick ghi789 Third commit
+   pick jkl012 Fourth commit
+   pick mno345 Fifth commit
+   ```
+   - **`pick`**：保留提交。
+   - **`squash`（或 `s`）**：将当前提交合并到前一个提交。
+   - **`edit`**：修改提交内容。
+   - **`reword`**：修改提交信息。
+
+   示例：将 `ghi789` 和 `jkl012` 合并到 `def456` 中：
+   ```text
+   pick abc123 First commit
+   pick def456 Second commit
+   squash ghi789 Third commit
+   squash jkl012 Fourth commit
+   pick mno345 Fifth commit
+   ```
+
+3. **编辑提交信息**：
+   保存后，Git 会提示你编辑合并后的提交信息。按需修改后保存并退出。
+
+4. **解决冲突（如果有）**：
+   如果 rebase 过程中出现冲突，按照提示解决冲突后继续：
+   ```bash
+   git add <file-name>
+   git rebase --continue
+   ```
+
+5. **推送到远端（如果需要）**：
+   完成 rebase 后，强制推送到远端：
+   ```bash
+   git push origin <branch-name> --force
+   ```
+
+---
+
+### **2. 使用场景**
+1. **整理提交历史**：
+   将多个零碎的提交合并为一个有意义的提交，便于代码审查。
+   - 示例：将最近 4 次提交整理为 1 次：
+     ```bash
+     git rebase -i HEAD~4
+     ```
+
+2. **修改提交信息**：
+   更新提交历史中的某条提交信息。
+   - 示例：修改最近 3 次提交的信息：
+     ```bash
+     git rebase -i HEAD~3
+     ```
+     将目标提交标记为 `reword`。
+
+3. **调整提交顺序**：
+   在交互式编辑器中，重新排列提交的顺序，便于代码逻辑清晰。
+
+4. **删除不需要的提交**：
+   在交互式编辑器中，将目标提交的操作改为 `drop`。
+
+---
+
+## 三、`git reset` 与 `git rebase -i` 的对比
+
+| 特性                     | `git reset`                                           | `git rebase -i`                                       |
+|--------------------------|-------------------------------------------------------|------------------------------------------------------|
+| **操作范围**             | 直接修改当前分支的 HEAD 和索引状态。                    | 逐步重新应用提交，允许修改、合并、删除提交历史。       |
+| **是否保留提交顺序**     | 不保留，直接回退到目标提交后一步完成。                  | 保留提交顺序，并允许手动调整提交顺序。                 |
+| **冲突可能性**           | 无需逐步应用提交，一般不会触发冲突。                    | 逐步应用提交，可能会触发冲突。                        |
+| **适用场景**             | 简单的回退操作或合并提交。                              | 复杂的提交历史整理与精细化调整。                       |
+
+---
+
+## 四、总结
+
+- 使用 **`git reset`** 时：
+  - 适合快速回退提交、合并提交，操作简单直接。
+  - 不适合需要复杂调整或保留提交顺序的场景。
+
+- 使用 **`git rebase -i`** 时：
+  - 适合需要精细化整理提交历史的场景。
+  - 需要注意解决冲突，并在操作完成后强制推送更新。
+ 
