@@ -30,21 +30,22 @@
 
 ## 注意事项
 
-1. **分支名称应清晰简洁**：type 只能取以上其中一种，task_name 尽量描述简洁具体任务内容，JiraID 则为对应 Jira 上的任务ID。
+1. **分支名称应清晰简洁**：type 只能取以上其中一种，task_name 尽量描述简洁具体任务内容，JiraID 则为对应 Jira 上的任务ID。（JiraID 递增，自动排序方便查看）
 2. **统一使用小写字母**：task_name 开发者根据具体任务内容取不超过 3 个单词的名称，单词之间用 `_` 分隔，最后以  `-` 接续 JiraID。
 3. **避免使用特殊字符**：如 `@`, `#`, `$` 等，避免潜在兼容性问题。
 4. **及时删除无用分支**：测试或实验分支完成任务后应及时清理。
 
-通过遵循以上命名规范，可以使团队协作更加高效，分支管理更加清晰明了。
-
 ## 拉取规范
-一般情况下统一从 origin prod 最新提交记录拉取分支
+一般情况下统一从 origin prod 最新提交记录拉取分支，对于未上线 prod 但在 rel 发现的 bug 可从 origin rel 拉取 bugFix 分支
 
 
 # 分支提交规范
 
- feature 分支为开发分支，原则上在合并入主流分支：dev,stg,rel,prod 前，最多只能有 5 次commit，其他类型的分支（bugfix、hotfix等）理论上应该更少提交记录。
-
+1. feature 分支只允许合并入 dev、stg 分支，且在合并入之前，原则上最多只能有 5 次commit记录，其他类型的分支（bugfix、hotfix等）理论上应该更少提交记录
+2. bugfix、hotfix 分支 允许合入所有主流分支
+3. 不允许在 dev、stg、rel、prod 分支上直接 push 代码（Gitlab 做控制）
+4. feature 分支在合入 dev、stg 分支时，需按照排期先后合入，featureA 分支是在 featureB 分支前合并入 dev，则合并入 stg 也需要在 featureB 之前
+5. rel 分支要不要？要的话需要 测试将排期错开 拉 rel 分支
 
 
 
