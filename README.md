@@ -1,3 +1,8 @@
+# 开发流程
+
+<img width="1362" alt="image" src="https://github.com/user-attachments/assets/990aa0d0-3013-4567-a374-2e6d8499347a" />
+
+
 # 分支规范
 为了规范团队的分支管理，提高协作效率，推荐使用以下 Git 分支命名规则。
 
@@ -5,11 +10,13 @@
 
 ## 命名结构
 
-分支名称通常以 `类型/描述` 的结构命名：
+一般分支名称通常以 `类型/描述` 的结构命名：
 
 ```
 <type>/<task_name>-<JiraID>
 ```
+
+(release 分支名称则以 `release/v1.2.0<JenkinsVer>` 的结构命名)
 
 ---
 
@@ -35,19 +42,23 @@
 3. **避免使用特殊字符**：如 `@`, `#`, `$` 等，避免潜在兼容性问题。
 4. **及时删除无用分支**：测试或实验分支完成任务后应及时清理。
 
-## 拉取规范
-一般情况下统一从 origin prod 最新提交记录拉取分支，对于未上线 prod 但在 rel 发现的 bug 可从 origin rel 拉取 bugFix 分支
+## 分支拉取规范
+1. 统一从 origin prod 最新提交记录拉取 feature 分支
+2. 未上线 prod 但在 rel 发现的 bug 需要从最新 origin rel 拉取 bugFix 分支进行修复
+3. dev、stg 发现的 bug 直接在对应的 feature 分支进行修复即可
+4. 预计上线版本内容在 stg 测试验证通过后，在 origin stg 最新提交拉取 release 分支，该分支上只允许提交一次 commit 修改版本号
 
 
 # 分支提交规范
 
 1. feature 分支只允许合并入 dev、stg 分支，且在合并入之前，原则上最多只能有 5 次commit记录，其他类型的分支（bugfix、hotfix等）理论上应该更少提交记录
-2. bugfix、hotfix 分支 允许合入所有主流分支
+2. bugfix、hotfix 分支允许合入 dev、stg、rel 分支，只有 rel 分支仅通过 Gitlab merge request 合并入 prod 分支
 3. 不允许在 dev、stg、rel、prod 分支上直接 push 代码（Gitlab 做控制）
-4. feature 分支在合入 dev、stg 分支时，需按照排期先后合入，featureA 分支是在 featureB 分支前合并入 dev，则合并入 stg 也需要在 featureB 之前
+4. feature 分支在合入 dev、stg 分支时，需按照版本排期先后合入，featureA 分支是在 featureB 分支前合并入 dev，则合并入 stg 也需要在 featureB 之前
 5. rel 分支要不要？要的话需要 测试将排期错开 拉 rel 分支
 
-
+改善点：Jenkins 版本能否与 日期之类的关联 v1.0.0.12 => v1.0.5.15
+      开发只关注 dev stg rel? 版本控制是否也需要测试控制
 
 
 
@@ -59,9 +70,11 @@
 
 
 
+<img width="1354" alt="image" src="https://github.com/user-attachments/assets/f9c77aab-03a4-411a-9ab9-147691da45a0" />
 
 
 
+<img width="1451" alt="image" src="https://github.com/user-attachments/assets/d75d307e-60db-4346-8d25-2576b050be0a" />
 
 
 
