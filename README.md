@@ -1,6 +1,13 @@
-# 开发流程
+# 完整开发流程
 
-<img width="1362" alt="image" src="https://github.com/user-attachments/assets/990aa0d0-3013-4567-a374-2e6d8499347a" />
+ <img width="1383" alt="image" src="https://github.com/user-attachments/assets/d143f335-db01-42fa-9e79-34108c8cf714" />
+
+## 详细说明
+1. **dev 开发阶段**：根据 Jira 分配的任务从 prod 拉取分支，命名需严格按照下方分支规范（目前以 featureA 为例）；开发自测通过后，需合并入 dev 分支查看是否有冲突并解决，然后再次验证功能
+2. **stg 提测阶段**：featureA 合入 dev 分支自测通过后，便可合入 stg 分支，依旧需要查看是否有冲突并解决；在 stg 环境发版自测通过后，可进行提测；提测失败需要在 featureA 分支进行修复，后续需要重新先后合并入 dev、stg 分支进行再次验证
+3. **rel 验收阶段**：featureA 在测试验收通过后，需合入 rel 分支
+4. **prod 上线阶段**：
+5. **hotfix 紧急修复**：
 
 
 # 分支规范
@@ -13,10 +20,8 @@
 一般分支名称通常以 `类型/描述` 的结构命名：
 
 ```
-<type>/<task_name>-<JiraID>
+<type>/<JiraID>-<task_name>
 ```
-
-(release 分支名称则以 `release/v1.2.0<JenkinsVer>` 的结构命名)
 
 ---
 
@@ -24,20 +29,15 @@
 
 | 类型        | 说明                                                                 | 示例                                    |
 |-------------|----------------------------------------------------------------------|-----------------------------------------|
-| **feature** | 新功能开发                                                          | `feature/login_page-221`                    |
-| **bugfix**  | 修复 bug                                                            | `bugfix/login_error-532`                |
-| **hotfix**  | 紧急修复生产环境问题                                                | `hotfix/payment_crash-325`                  |
-| **release** | 发布相关，如版本准备                                                | `release/v1.2.0`                        |
-| **test**    | 用于临时测试的分支                                                  | `test/new_relic_check`                  |
-| **chore**   | 非功能性工作，如重构、配置更改                                       | `chore/upgrade_dependency`              |
-| **docs**    | 文档修改                                                            | `docs/api_endpoint_update`              |
-| **experiment** | 用于试验性质的代码                                               | `experiment/graphql_support`            |
+| **feature** | 新功能开发、优化等                                                          | `feature/221-login_page`                    |
+| **bugfix**  | 修复 bug                                                            | `bugfix/532-login_error`                |
+| **hotfix**  | 紧急修复生产环境问题                                                | `hotfix/325-payment_crash`                  |
 
 ---
 
 ## 注意事项
 
-1. **分支名称应清晰简洁**：type 只能取以上其中一种，task_name 尽量描述简洁具体任务内容，JiraID 则为对应 Jira 上的任务ID。（JiraID 递增，自动排序方便查看）
+1. **分支名称应清晰简洁**：type 只能取以上其中一种，JiraID 为对应 Jira 上的任务ID（JiraID 递增，自动排序方便查看），task_name 尽量描述简洁具体任务内容，
 2. **统一使用小写字母**：task_name 开发者根据具体任务内容取不超过 3 个单词的名称，单词之间用 `_` 分隔，最后以  `-` 接续 JiraID。
 3. **避免使用特殊字符**：如 `@`, `#`, `$` 等，避免潜在兼容性问题。
 4. **及时删除无用分支**：测试或实验分支完成任务后应及时清理。
