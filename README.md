@@ -1,6 +1,6 @@
 # 完整开发流程
+<img width="1462" alt="image" src="https://github.com/user-attachments/assets/1de2a576-e00c-4933-9f69-b0efeee3334f" />
 
-<img width="1391" alt="image" src="https://github.com/user-attachments/assets/b48dae1a-b1b6-4723-869c-3e203ea2b7dd" />
 
 ### 详细说明
 1. **dev 开发阶段**：根据 Jira 分配的任务从 prod 拉取分支，命名需严格按照下方分支规范（目前以 featureA 为例）；开发自测通过后，需合并入 dev 分支查看是否有冲突并解决，然后再次验证功能
@@ -44,7 +44,7 @@
 
 ### 分支限制
 1. prod 分支只允许从 rel 合并，且只能通过 Gitlab merge request 操作
-2. 不允许在 dev、stg、rel、prod 分支上直接 push 代码（Gitlab 做控制？）
+2. 不允许在 rel、prod 分支上直接 push 代码
 3. 各 feature、bugfix、hotfix 分支之间不可互相合并
 
 ### 发信模版
